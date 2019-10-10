@@ -30,13 +30,27 @@ def clean_text(text_block):
     #Remove all other punctuation and numbers (except apostrophe).
     text_block = re.sub(r'[^\w\s\']|\d',' ',text_block.lower())
     #Remove multiple spaces and make a single space. Also remove leading/trailing spaces.
-    text_block = re.sub(' +', ' ', text_block.strip())
-    return text_block
+    text_block = re.sub(' +', ' ', text_block)
+    return text_block.strip()
+
+#DEFINE PHRASE CLEAR FUNCTION
+def phrase_clear(text_block):
+    """
+    Removes underscores from tokens in tokenized data. Returns re-tokenized text.
+    INPUT:
+    text_block = tokenized text block containing n-grams to be removed.
+    OUTPUT:
+    Tokenized text block that has n-grams transformed back into individual words.
+    """
+    cleared = []
+    for idx, word in enumerate(text_block):
+        cleared.extend(word.split("_"))
+    return cleared
 
 #DEFINE REVIEW CLASS
 class Review:
     """
-    Review class is used to contain the date, text, star_rating, and sentiment polarity of a review.
+    Review class contains the date, text, star_rating, and sentiment polarity of a review.
     """
 
     def __init__(self, text, date, star_rating):
@@ -80,6 +94,7 @@ class Review:
         """
         if self.tokenized:
             self.text = [[clean_text(token) for token in sentence] for sentence in self.text]
+            self.drop_short_sentences(0)
         else:
             self.text = [clean_text(sentence) for sentence in self.text]
         
@@ -161,6 +176,10 @@ class Review:
 
 #DEFINE RESTAURANT CLASS
 class Restaurant:
+    """
+    The Restaurant Class contains the name, business id, address, category list, price range, star rating, keywords list,
+    and a list of Review objects for a restaurant.
+    """
 
     def __init__(self, name, business_index ,address, categories, price_range, star_rating):
         self.name = name
@@ -220,6 +239,20 @@ class Restaurant:
                 if review.star_rating==star_rating:
                     review_sentences.extend(review.text)
         return review_sentences
+    
+    def get_reviews(self, star_rating=0):
+        """
+        Returns a list of tokenized reviews (list of lists).
+        """
+        reviews_tokenized = []
+        if star_rating == 0:
+            for review in self.reviews:
+                reviews_tokenized.append(review.get_all_tokens())
+        else:
+            for review in self.reviews:
+                if review.star_rating==star_rating:
+                    reviews_tokenized.append(review.get_all_tokens())
+        return reviews_tokenized
     
     def get_review_objects(self):
         """

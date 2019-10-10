@@ -2,6 +2,11 @@ import re
 import pandas as pd
 import ast
 
+"""
+This python file reads business info and reviews csv files. It also provides a series of functions
+that are used to query the business and review data.
+"""
+
 business_info_df = pd.read_csv("csv_files/business_info_all.csv")
 #Business categories are stored as one string. Convert to a list of strings.
 business_info_df.category = business_info_df.category.map(ast.literal_eval)
