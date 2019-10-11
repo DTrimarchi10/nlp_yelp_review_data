@@ -1,6 +1,8 @@
 import numpy as np
 import pandas as pd
 import time
+from nltk.tokenize import TweetTokenizer
+from nltk.corpus import stopwords
 from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import accuracy_score
 from keras.preprocessing import text, sequence
@@ -200,3 +202,17 @@ def gridsearch_all_models(models, X_train, X_test, y_train, y_test, cv=4, scorin
     end = time.time()
     print("TOTAL TIME:", time.strftime('%H:%M:%S', time.gmtime(end-start)))
     return results
+
+
+def test_the_classifier(model, review_text):
+    """
+    This function is used for amusement purposes to quickly get a prediction using the provided review text and model.
+    """
+    stopwords = stopwords.words('english')
+    tokenizer = TweetTokenizer(preserve_case=False).tokenize
+    temp_review = Review(review_text, 'dummy_date', 0)
+    temp_review.clean_text()
+    temp_review.tokenize(tokenizer)
+    temp_review.remove_stopwords(stopwords)
+    
+    return model.predict([temp_review.get_all_tokens()])[0]

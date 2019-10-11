@@ -50,9 +50,10 @@ def display_polarity_over_time(restaurant_list):
     plt.figure(figsize=(20,8))
     for rest in restaurant_list:
         date_polarities = rest.get_review_polarities_by_date()
-        sns.lineplot(x='date',y='polarity',data=date_polarities,alpha=0.3,label=rest.name)
+        sns.lineplot(x='date',y='polarity',data=date_polarities,alpha=0.3,label=rest.biz_id)
         polarity_averages = get_polarity_over_time(date_polarities)
         sns.lineplot(x='date',y='polarity',data=polarity_averages,label=f"{rest.name} (average)")
+    plt.grid(alpha=0.3)
     return
 
 def get_idf(doc_list, tokenized=False, ngram_range=(1,3)):
@@ -161,7 +162,7 @@ def dummy_function(doc):
     """
     return doc
 
-def tsne_plot_words(model, n_words, positive, negative):
+def tsne_plot_words(model, n_words, positive, negative, figsize=(16,16)):
     """
     This function will plot a word embedding model's most similar words by performing a TSNE dimensionality reduction.
     
@@ -183,7 +184,6 @@ def tsne_plot_words(model, n_words, positive, negative):
         tokens.append(model[word])
         labels.append(word)
     
-    #tsne_model = TSNE(perplexity=40, n_components=2, init='pca', n_iter=2500, random_state=23)
     tsne_model = TSNE(perplexity=40, n_components=2, init='pca', n_iter=2500)
     new_values = tsne_model.fit_transform(tokens)
 
@@ -193,7 +193,7 @@ def tsne_plot_words(model, n_words, positive, negative):
         x.append(value[0])
         y.append(value[1])
         
-    plt.figure(figsize=(16, 16)) 
+    plt.figure(figsize=figsize) 
     for i in range(len(x)):
         plt.scatter(x[i],y[i])
         plt.annotate(labels[i],
