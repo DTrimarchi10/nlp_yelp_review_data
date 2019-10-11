@@ -6,17 +6,16 @@ This readme summarizes the work completed for a Restaurant Reviews NLP project. 
 
 * [Abstract](#Abstract)
 * [Results Summary](#Results-Summary)
-* [Future Work](#Future-Word)
 * [Dashboard](#Dashboard)
+* [Recommendations & Future Work](#Recommendations-and-Future-Work)
 * [Files and Descriptions](#Files-and-Descriptions)
-* [Analysis](#Analysis)
-    * [Data Gathering](#Data-Gathering)
-    * [NLP & Data Analysis](#NLP-and-Data-Analysis)
-        * [Sentiment Distribution](#Sentiment-Distribution)
-        * [Sentiment Over Time](#Sentiment-Over-Time)
-        * [Keywords Extraction](#Keywords-Extraction)
-        * [Most Similar Analysis](#Most-Similar-Analysis)
-    * [Data Modeling](#Data-Modeling)
+* [Data Gathering](#Data-Gathering)
+* [NLP & Data Analysis](#NLP-and-Data-Analysis)
+    * [Sentiment Distribution](#Sentiment-Distribution)
+    * [Sentiment Over Time](#Sentiment-Over-Time)
+    * [Keywords Extraction](#Keywords-Extraction)
+    * [Most Similar Analysis](#Most-Similar-Analysis)
+* [Data Modeling](#Data-Modeling)
 
 -------
 
@@ -51,21 +50,23 @@ Additionally, **phrase and TF/IDF analysis can be used to extract keywords** fro
 
 -------
 
-# Future Work
+# Dashboard
+
+An online dashboard with a subset of the data can be found at the following link. It allows selection of a restaurant for inspection where a user can view the sentiment and review ratings over time, the distribution of reviews and a visual representation of keywords. From there, individual reviews can be seen based on the selected or manually entered keyword.
+
+Dashboard Link: [https://public.tableau.com/profile/dennis.t2456#!/vizhome/Restaurant_Review_Data/Dashboard1?publish=yes]
+
+-------
+
+# Recommendations and Future Work
+
+Businesses should use the keywords identified as a way to learn about what customers think of their business, which dishes are most/least successful, and to gain insights about customer service. Additionally, sentiment scores over time provide trending of review sentiment. This can indicate an upward/downward trend that business owners should monitor and potentially react-to accordingly. The dashboard allows for viewing reviews based on the identified keywords thereby providing the necessary details of the review if desired.  
 
 Additional sources of review-like text data could be gathered and incorporated into the dataset. The text data would be assigned a rating level using the tuned classification model. Then, these reviews can be used to extract keywords, sentiment values, and to generate contextual information in the same manner that scraped reviews were used in this project. 
 
 The classification models themselves can be further improved with adjustments to vector dimensionality, and model parameters.
 
 Additional features to be added include trend analysis of keyword frequency based on time. This would open the door to see what keywords are being used over time for a particular business or within a particular category. Incorporating better word-cloud visualization capability would be a good way to improve presentation of keyword information.
-
--------
-
-# Dashboard
-
-An online dashboard with a subset of the data can be found at the following link. It allows selection of a restaurant for inspection where a user can view the sentiment and review ratings over time, the distribution of reviews and a visual representation of keywords. From there, individual reviews can be seen based on the selected or manually entered keyword.
-
-Dashboard Link: [https://public.tableau.com/profile/dennis.t2456#!/vizhome/Restaurant_Review_Data/Dashboard1?publish=yes]
 
 -------
 
@@ -104,9 +105,6 @@ Dashboard Link: [https://public.tableau.com/profile/dennis.t2456#!/vizhome/Resta
 
 -------
 
-# Analysis
-
-<details><summary>USE DROPDOWN</summary>
 
 # Data Gathering
 All web scraping is completed in [Project_Data_Gathering.ipynb](Project_Data_Gathering.ipynb) notebook. 1081 restaurants were identified using the search query 'restaurants' in 'Albany, NY' on Yelp.com. From those businesses, 59274 reviews were gathered for analysis. A subset of this data is included in the Github repository. There are two different structures of Yelp review pages (using different class labels and slightly different structures), for this reason, two scraping functions are used to collect review data.
@@ -136,7 +134,7 @@ Once sentiment has been applied to each review object, review sentiment over tim
 
 Phrasing of review text was performed using `Phraser` from `gensim.models.phrases`. The text was fit and transformed using the phraser twice. The first time to generate bigrams, the second to generate trigrams. Once phrasing was completed. Before the phrasers were applied, stopwords were removed (this proved to give more informative phrase results).
 
-Keywords were extracted for each restaurant within by star rating level. This was done by performing TF/IDF analysis for a restaurants reviews (as a document) compared to other restaurants within common cuisine type categories. An `sklearn.feature_extraction.text.TfidfVectorizer` was used to fit documents and retrieve TF/IDF scores for words from specific documents.
+Keywords were extracted for each restaurant by star rating level. This was done by creating a document of reviews for each restaurant at each star rating level and then performing the TF/IDF analysis to the document set. A review document for a restaurant was compared to other restaurant documents within common cuisine type categories. An `sklearn.feature_extraction.text.TfidfVectorizer` was used to fit documents and retrieve TF/IDF scores for words from specific documents.
 
 **Example Restaurant:** Madison Pour House - _American (New), Pubs_
 
@@ -190,21 +188,4 @@ Notes:
 
 The Keras LSTM Network model performed very well. In fact, it performed better than the SVC model on both the training and test data. However, I chose the SVC model because it was less prone to overfitting and performed similarly between the training data and test data.
 
-</details>
-
 -------
-
-
-```python
-
-```
-
-
-```python
-
-```
-
-
-```python
-
-```
